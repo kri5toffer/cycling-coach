@@ -6,10 +6,7 @@ const connectDB = async () => {
     // - mongodb://localhost:27017 - local MongoDB instance
     // - cycling_ai_coach - database name (created automatically if doesn't exist)
     // We use environment variables for flexibility between development and production
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/cycling_ai_coach', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/cycling_ai_coach');
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
