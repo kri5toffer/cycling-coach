@@ -31,7 +31,7 @@ function App() {
   }, []); 
 
   return (
-    <div className="App">
+    <div className="container">
       <header className="App-header">
         <h1>Cycling AI Analyzer</h1>
         <p>Frontend Message: Hello, React App!</p>

@@ -1,25 +1,37 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --primary: #646cff;
+  --secondary: #535bf2;
+  --background: #242424;
+  --text: #fff;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color: var(--text);
+  background-color: var(--background);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(36,36,36,0.95);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+}
+
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--primary);
   text-decoration: inherit;
+  transition: color 0.2s;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--secondary);
 }
 
 body {
@@ -28,11 +40,15 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  font-weight: 700;
+  color: #fff;
 }
 
 button {
@@ -44,10 +60,13 @@ button {
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--primary);
+  background: #333;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 }
 button:focus,
 button:focus-visible {
@@ -64,5 +83,16 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+    max-width: 100%;
+    border-radius: 0;
+  }
+  h1 {
+    font-size: 2em;
   }
 }
