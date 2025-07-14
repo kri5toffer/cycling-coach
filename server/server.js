@@ -1,32 +1,42 @@
-// Load environment variables from .env file (optional)
+// Load environment variables from .env file
 require('dotenv').config();
 
-// Import Express.js web framework
+// Import required modules
 const express = require('express');
-
-// Import CORS middleware for cross-origin requests
 const cors = require('cors');
+const connectDB = require('./config/database');
+const mongoose = require('mongoose'); // Added for health check
 
 // Create Express app instance
 const app = express();
 
-// Set server port (from env or default to 3001)
+// Connect to MongoDB - this runs when server starts
+connectDB();
+
+// Set server port
 const PORT = process.env.PORT || 3001;
 
-// Enable CORS for all routes
-app.use(cors());
+// Middleware
+app.use(cors());                           // Enable cross-origin requests
+app.use(express.json());                   // Parse JSON request bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
-// Parse JSON request bodies
-app.use(express.json());
-
-// Define GET endpoint at /api/message
+// Test endpoint - existing
 app.get('/api/message', (req, res) => {
-  // Send JSON response
   res.json({ message: 'Hello from the backend, cyclists!' });
 });
 
-// Start server and listen on specified port 
+// Health check endpoint - new
+// This helps monitor if database is connected in production
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Start server
 app.listen(PORT, () => {
-  // Log server start confirmation
   console.log(`Server is running on http://localhost:${PORT}`);
 });
