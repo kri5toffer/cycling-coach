@@ -1,52 +1,42 @@
+// Load environment variables from .env file
 require('dotenv').config();
+
+// Import required modules
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const connectDB = require('./config/database');
+const mongoose = require('mongoose'); // Added for health check
 
+// Create Express app instance
 const app = express();
+
+// Connect to MongoDB - this runs when server starts
+connectDB();
+
+// Set server port
 const PORT = process.env.PORT || 3001;
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB Atlas'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(cors());                           // Enable cross-origin requests
+app.use(express.json());                   // Parse JSON request bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
-// Simple cycling data schema
-const CyclingData = mongoose.model('CyclingData', {
-  rider: String,
-  distance: Number,
-  time: Number,
-  date: { type: Date, default: Date.now }
-});
-
-// Routes
+// Test endpoint - existing
 app.get('/api/message', (req, res) => {
   res.json({ message: 'Hello from the backend, cyclists!' });
 });
 
-app.get('/api/rides', async (req, res) => {
-  try {
-    const rides = await CyclingData.find();
-    res.json(rides);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+// Health check endpoint - new
+// This helps monitor if database is connected in production
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    timestamp: new Date().toISOString()
+  });
 });
 
-app.post('/api/rides', async (req, res) => {
-  try {
-    const newRide = new CyclingData(req.body);
-    const savedRide = await newRide.save();
-    res.status(201).json(savedRide);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
