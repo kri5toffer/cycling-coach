@@ -18,11 +18,12 @@ services:
     container_name: cycling-backend
     ports:
       - "3001:3001"
+    environment:
+      - PORT=3001
+      - MONGODB_URI=${MONGODB_URI}
     volumes:
       - ./server:/app
       - /app/node_modules
-    environment:
-      - PORT=3001
 
 volumes:
   data:
