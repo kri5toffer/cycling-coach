@@ -1,4 +1,4 @@
-vservices:
+services:
   cycling-frontend:
     build:
       context: ./client
@@ -7,7 +7,7 @@ vservices:
     ports:
       - "80:80"
     depends_on:
-      - backend
+      - cycling-backend
 
   cycling-backend:
     build:
@@ -21,9 +21,9 @@ vservices:
       - /app/node_modules
     environment:
       - PORT=3001
-      - MONGODB_URI=mongodb://mongodb:27017/cycling-coach
+      - MONGODB_URI=mongodb://cycling-mongodb:27017/cycling-coach
     depends_on:
-      - mongodb
+      - cycling-mongodb
 
   cycling-mongodb:
     image: mongo:latest
