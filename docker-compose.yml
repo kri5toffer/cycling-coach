@@ -1,7 +1,5 @@
-version: '3.8'
-
-services:
-  frontend:
+vservices:
+  cycling-frontend:
     build:
       context: ./client
       dockerfile: Dockerfile
@@ -11,7 +9,7 @@ services:
     depends_on:
       - backend
 
-  backend:
+  cycling-backend:
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -27,7 +25,7 @@ services:
     depends_on:
       - mongodb
 
-  mongodb:
+  cycling-mongodb:
     image: mongo:latest
     container_name: cycling-mongodb
     ports:
