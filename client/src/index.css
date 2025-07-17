@@ -74,7 +74,7 @@ body {
 ::selection {
   background: rgba(252, 76, 2, 0.3);
   color: #ffffff;
-}
+  }
 
 /* Focus styling */
 :focus {

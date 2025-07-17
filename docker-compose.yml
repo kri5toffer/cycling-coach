@@ -23,6 +23,20 @@ services:
       - /app/node_modules
     environment:
       - PORT=3001
+      - MONGODB_URI=mongodb://mongodb:27017/cycling-coach
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    container_name: cycling-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=cycling-coach
 
 volumes:
   data:
+  mongodb_data:

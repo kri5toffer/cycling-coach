@@ -312,14 +312,14 @@ button {
   display: flex;
   align-items: center;
   font-size: 0.9rem;
-}
+  }
 
 .feature-list li::before {
   content: "•";
   color: var(--primary-color);
   font-weight: bold;
   margin-right: 0.75rem;
-}
+  }
 
 .btn-strava {
   background: var(--primary-gradient);
@@ -383,8 +383,8 @@ button {
 @media (max-width: 768px) {
   h1 {
     font-size: 2.5rem;
-  }
-  
+}
+
   h2 {
     font-size: 2rem;
   }

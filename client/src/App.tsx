@@ -57,7 +57,7 @@ function App() {
         <div className="ai-badge">
           <span className="ai-icon">✨</span>
           <span>Powered by AI</span>
-        </div>
+      </div>
 
         <div className="hero-content">
           <h1>
