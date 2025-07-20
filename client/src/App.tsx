@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
+import ProfileForm from './pages/ProfileForm';
 
-function App() {
+function HomePage() {
   const [message, setMessage] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -57,7 +59,7 @@ function App() {
         <div className="ai-badge">
           <span className="ai-icon">✨</span>
           <span>Powered by AI</span>
-      </div>
+        </div>
 
         <div className="hero-content">
           <h1>
@@ -137,7 +139,7 @@ function App() {
               <li>No account connection required</li>
             </ul>
             
-            <button className="btn-manual">Get Started</button>
+            <Link to="/profile" className="btn-manual">Get Started</Link>
           </div>
         </div>
       </main>
@@ -153,6 +155,17 @@ function App() {
         )}
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/profile" element={<ProfileForm />} />
+      </Routes>
+    </Router>
   );
 }
 
