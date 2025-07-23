@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import ProfileForm from './pages/ProfileForm';
+import ProfileForm from './pages/ProfileForm.tsx';
+import TrainingPlan from './pages/TrainingPlan.tsx';
 
 function HomePage() {
   const [message, setMessage] = useState<string>('');
@@ -139,7 +140,7 @@ function HomePage() {
               <li>No account connection required</li>
             </ul>
             
-            <Link to="/profile" className="btn-manual">Get Started</Link>
+            <a href="/profile" className="btn-manual">Get Started</a>
           </div>
         </div>
       </main>
@@ -164,6 +165,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/profile" element={<ProfileForm />} />
+        <Route path="/plan/:sessionId" element={<TrainingPlan />} />
       </Routes>
     </Router>
   );

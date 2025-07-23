@@ -50,36 +50,44 @@ export default function ProfileForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<UserProfile>({
     basicInfo: {
-      age: 0,
-      weight: 0,
-      height: 0,
-      gender: ''
+      age: 35,
+      weight: 75,
+      height: 178,
+      gender: 'male'
     },
     experience: {
-      level: '',
-      yearsOfCycling: 0,
-      currentWeeklyHours: 0,
-      currentWeeklyDistance: 0
+      level: 'intermediate',
+      yearsOfCycling: 3,
+      currentWeeklyHours: 6,
+      currentWeeklyDistance: 120
     },
     goals: {
-      primaryGoal: '',
-      targetEvent: {},
-      specificGoals: []
+      primaryGoal: 'endurance',
+      targetEvent: {
+        eventType: 'gran_fondo',
+        eventDate: '2023-09-30',
+        eventName: 'Fall Century Ride'
+      },
+      specificGoals: ['improve climbing', 'build endurance']
     },
     equipment: {
-      bikes: [],
-      hasHeartRateMonitor: false,
-      hasCyclingComputer: false,
-      hasIndoorTrainer: false
+      bikes: [{
+        type: 'road',
+        hasPowerMeter: true,
+        hasSmartTrainer: false
+      }],
+      hasHeartRateMonitor: true,
+      hasCyclingComputer: true,
+      hasIndoorTrainer: true
     },
     schedule: {
-      daysPerWeek: 0,
-      preferredDays: [],
+      daysPerWeek: 4,
+      preferredDays: ['monday', 'wednesday', 'friday', 'saturday'],
       sessionDuration: {
-        min: 30,
+        min: 45,
         max: 120
       },
-      preferredTime: ''
+      preferredTime: 'morning'
     }
   });
 
@@ -88,7 +96,8 @@ export default function ProfileForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:3001/api/profile', {
+      // Step 1: Create user profile
+      const profileResponse = await fetch('http://localhost:3001/api/profile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -96,19 +105,40 @@ export default function ProfileForm() {
         body: JSON.stringify(formData)
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Profile created successfully:', result);
-        alert('Profile created successfully! Session ID: ' + result.data.sessionId);
-        navigate('/');
-      } else {
-        const error = await response.json();
-        console.error('Error creating profile:', error);
-        alert('Error creating profile: ' + error.message);
+      if (!profileResponse.ok) {
+        const error = await profileResponse.json();
+        throw new Error(error.message || 'Failed to create profile');
       }
+
+      const profileResult = await profileResponse.json();
+      const sessionId = profileResult.data.sessionId;
+
+      // Step 2: Generate training plan (mock call - replace with actual API when ready)
+      try {
+        const planResponse = await fetch(`http://localhost:3001/api/training-plan/generate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ sessionId })
+        });
+
+        // Even if plan generation fails, we still redirect to show the profile was created
+        if (planResponse.ok) {
+          console.log('Training plan generated successfully');
+        } else {
+          console.log('Training plan generation failed, but profile was created');
+        }
+      } catch (planError) {
+        console.log('Training plan API not ready, but profile was created');
+      }
+
+      // Step 3: Redirect to training plan page
+      navigate(`/plan/${sessionId}`);
+
     } catch (error) {
-      console.error('Network error:', error);
-      alert('Network error. Please check if the backend is running.');
+      console.error('Error creating profile:', error);
+      alert('Error creating profile: ' + (error instanceof Error ? error.message : 'Unknown error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -578,7 +608,7 @@ export default function ProfileForm() {
                   opacity: isSubmitting ? 0.7 : 1
                 }}
               >
-                {isSubmitting ? 'Creating Profile...' : 'Create Profile'}
+                {isSubmitting ? 'Creating Profile & Plan...' : 'Create Profile'}
               </button>
             </div>
           </form>
